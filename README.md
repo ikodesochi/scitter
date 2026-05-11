@@ -27,15 +27,14 @@
 ---
 
 ## 🗂️ СТРУКТУРА ПРОЕКТА SKITTER
-
-Skitter/
-
-    index.html
-    style.css
+    
+    LICENSE
     README.md
 
     src/
-
+        
+        index.html
+        style.css
         game.js
         physics.js
         storage.js
