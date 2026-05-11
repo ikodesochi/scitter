@@ -16,7 +16,7 @@
 
 ---
 
-## 🧭 Что такое этот репозиторий?
+## 🧭 ЧТО ТАКОЕ РЕПОЗИТОРИЙ?
 
 Это место, где хранится код нашей игры. Репозиторий — как общая папка, в которую каждый из вас добавляет свою часть.
 
@@ -26,64 +26,117 @@
 
 ---
 
-## 🗂️ Структура проекта (что где лежит)
+## 🗂️ СТРУКТУРА ПРОЕКТА SKITTER
 
-    termix-cat-and-mouse/
-        index.html
-        style.css
+Skitter/
+
+    index.html
+    style.css
+    README.md
+
+    src/
+
         game.js
+        physics.js
+        storage.js
+        messages.json
+
+        scripts/
+
+            eastereggs.js
+            dialogs.js
+            achievements.js
+            obstacles.js
+
+        traps/
+
+            oil_slick.js
+            spikes.js
+            disappearing_platform.js
+
+        levels/
+
+            level1.json
+            level2.json
+            level3.json
+
+        characters/
+
+            character_data.json
+
+        ui/
+
+            main_menu.html
+            pause_menu.html
+            game_over.html
 
     assets/
+
         sprites/
-            cat.png
-            mouse.png
-            cat_walk.gif
-            mouse_run.gif
 
-        textures/
-            background.png
-            floor.png
-            wall.png
-            trap.png
+            cat_idle.png
+            cat_run.png
+            cat_attack.png
+            mouse_idle.png
+            mouse_run.png
+            mouse_scared.png
 
-        items/
-            cheese.png
-            powerup.png
-            slowdown.png
+        lighting/
+
+            shadows.png
 
         sounds/
-            meow.mp3
-            squeak.mp3
-            winner.mp3
-            gameover.mp3
 
-    levels/
-        level1.json
-        level2.json
-        level3.json
+            meow.wav
+            cheese.wav
+            victory.wav
+            gameover.wav
 
-    scripts/
-        input.js
-        obstacles.js
-        eastereggs.js
+        backgrounds/
+
+            level1_sky.png
+            level1_ground.png
+            level2_sky.png
+            level2_ground.png
+
+        tiles/
+
+            grass.png
+            stone.png
+            wood.png
+
+        objects/
+
+            chest.png
+            sign.png
+            crate.png
+
+        decorations/
+
+            tree.png
+            bush.png
+            lantern.png
 
     docs/
-        setup.md
-        git-guide.md
-        ideas.md
 
-## 🧑‍🤝‍🧑 Твоя роль в команде
+        GLOSSARY.md
+        CODESTYLE.md
+        SPRINTS.md
+        ROADMAP.md
 
-| Роль | Ответственность | Где лежит код |
-|------|----------------|----------------|
-| **Персонажи** | Спрайты кота и мышки, анимации | `assets/sprites/` |
-| **Текстуры** | Фон, стены, пол, ловушки | `assets/textures/` |
-| **Модельки (предметы)** | Сыр, бонусы, ускорители | `assets/items/` |
-| **Пасхалки** | Секретные триггеры и шутки | `scripts/eastereggs.js` |
-| **Локации** | Уровни (карты и сложность) | `levels/` |
-| **Препятствия** | Логика стен, ловушек, замедлений | `scripts/obstacles.js` |
-| **Сюжет** | Тексты, диалоги, подсказки | `game.js` (вставки) |
+        logic/
 
+            cat_movement.drawio
+            cheese_collection.drawio
+            lure_logic.drawio
+
+    issues/
+
+        bug_reports.md
+
+    .github/
+
+        pull_request_template.md
 ---
 
 ## 🛠️ Как начать работать (пошагово)
