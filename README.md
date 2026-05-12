@@ -27,24 +27,41 @@
 ---
 
 ## 🗂️ СТРУКТУРА ПРОЕКТА SKITTER
-    
+
     LICENSE
     README.md
 
     src/
-        
+
         index.html
         style.css
         game.js
-        physics.js
         storage.js
         messages.json
+
+        core/
+
+            constants.js
+            physics.js
+            utils.js
+
+        entities/
+
+            Mouse.js
+            Cat.js
+            Dog.js
+
+        systems/
+
+            input.js
+            audio.js
+            achievements.js
+            levelManager.js
 
         scripts/
 
             eastereggs.js
             dialogs.js
-            achievements.js
             obstacles.js
 
         traps/
@@ -55,9 +72,12 @@
 
         levels/
 
-            level1.json
-            level2.json
-            level3.json
+            level_meeting.js
+            level_cat_speed.js
+            level_dog.js
+            level_darkness.js
+            level_traps.js
+            level_final.js
 
         characters/
 
@@ -68,6 +88,21 @@
             main_menu.html
             pause_menu.html
             game_over.html
+
+        world/
+
+            worldGenerator.js
+            tileManager.js
+            camera.js
+
+        quests/
+
+            questManager.js
+            questList.js
+
+        inventory/
+
+            inventory.js
 
     assets/
 
@@ -97,6 +132,12 @@
             level1_ground.png
             level2_sky.png
             level2_ground.png
+            level3_sky.png
+            level3_ground.png
+            level4_sky.png
+            level4_ground.png
+            level5_sky.png
+            level5_ground.png
 
         tiles/
 
