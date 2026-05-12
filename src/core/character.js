@@ -6,17 +6,12 @@ export class Character {
         this.w = w;
         this.h = h;
         this.speed = speed;
+        this.baseSpeed = speed;
     }
 
-    move(dx, dy, map, tileSize, isSolidFn) {
-        const newX = this.x + dx;
-        const newY = this.y + dy;
-        if (!isSolidFn(newX, this.y, this.w, this.h, map, tileSize)) {
-            this.x = newX;
-        }
-        if (!isSolidFn(this.x, newY, this.w, this.h, map, tileSize)) {
-            this.y = newY;
-        }
+    move(dx, dy) {
+        this.x += dx;
+        this.y += dy;
     }
 
     drawDefault(ctx, color, emoji) {

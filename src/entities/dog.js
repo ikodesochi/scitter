@@ -1,37 +1,31 @@
-// entities/dog.js
+// entities/Dog.js
 import { Character } from '../core/character.js';
 
 export class Dog extends Character {
     constructor(x, y, w, h, speed) {
         super(x, y, w, h, speed);
         this.fullness = 100;
-        this.isProtecting = true;
-        this.sleepImg = null;
-        this.barkImg = null;
+        this.boneCount = 0;
     }
-
-    setImages(sleepImg, barkImg) {
-        this.sleepImg = sleepImg;
-        this.barkImg = barkImg;
-    }
-
-    updateFullness() {
-        this.fullness = Math.max(0, this.fullness - 0.05);
-        this.isProtecting = this.fullness > 0;
-    }
-
-    feed(amount = 20) {
-        this.fullness = Math.min(100, this.fullness + amount);
-        this.isProtecting = this.fullness > 0;
-    }
-
-    draw(ctx) {
-        const img = this.isProtecting ? this.barkImg : this.sleepImg;
-        if (img && img.complete) {
-            ctx.drawImage(img, this.x, this.y, this.w, this.h);
-        } else {
-            // fallback на случай, если картинка не загрузилась
-            super.drawDefault(ctx, this.isProtecting ? "#8B5A2B" : "#A0A0A0", this.isProtecting ? "🐕" : "💤");
+    
+    update(mouse, tryMove) {
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist > 100) {
+            const step = Math.min(this.speed, dist);
+            tryMove(this, (dx / dist) * step, (dy / dist) * step);
         }
+        this.fullness = Math.max(0, this.fullness - 0.02);
+    }
+    
+    draw(ctx, camera, boneCount) {
+        const x = this.x - camera.x;
+        const y = this.y - camera.y;
+        ctx.fillStyle = "#555";
+        ctx.fillRect(x, y, this.w, this.h);
+        ctx.font = "14px monospace";
+        ctx.fillStyle = "#ccaa88";
+        ctx.fillText(`🦴 ${boneCount}`, x + 5, y - 5);
     }
 }

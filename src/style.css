@@ -1,79 +1,152 @@
+/* style.css — Skitter, чёрно-белый минимализм с меню */
+
 * {
-    user-select: none;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 body {
-    background: radial-gradient(circle at 20% 30%, #0a1f1a, #020a05);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background: #000000;
+    overflow: hidden;
     font-family: 'Courier New', monospace;
-    margin: 0;
-    padding: 20px;
-}
-
-.game-container {
-    background: rgba(10, 20, 15, 0.3);
-    backdrop-filter: blur(12px);
-    border-radius: 42px;
-    padding: 24px;
-    box-shadow: 0 8px 32px rgba(0, 255, 65, 0.2);
-    border: 1px solid rgba(0, 255, 65, 0.3);
-    text-align: center;
 }
 
 canvas {
     display: block;
-    margin: 0 auto;
-    border-radius: 24px;
-    box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.4), 0 0 30px rgba(0, 255, 65, 0.3);
-    background-color: #0a100a;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    background: #0a0a0a;
 }
 
-.info-panel {
+/* Кнопка вызова меню */
+.menu-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 50%;
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 30px;
-    margin: 20px 0 15px;
-}
-
-.glass-card {
-    background: rgba(10, 25, 15, 0.4);
-    backdrop-filter: blur(8px);
-    border-radius: 60px;
-    padding: 8px 24px;
-    color: #ccffcc;
-    font-size: 18px;
-    font-weight: bold;
-    border: 1px solid rgba(0, 255, 65, 0.4);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.glass-btn {
-    background: rgba(20, 50, 25, 0.5);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 255, 65, 0.5);
-    color: #00ff88;
-    font-family: monospace;
-    font-size: 18px;
-    padding: 6px 24px;
-    border-radius: 40px;
+    font-size: 24px;
     cursor: pointer;
+    z-index: 20;
     transition: 0.2s;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: #eee;
 }
 
-.glass-btn:hover {
-    background: rgba(50, 100, 60, 0.6);
-    box-shadow: 0 0 15px #00ff41;
-    border-color: #00ff41;
-    color: #ffffff;
+.menu-btn:hover {
+    background: #222;
+    transform: scale(1.05);
 }
 
-.controls {
-    display: inline-block;
-    margin-top: 8px;
+/* Панель меню */
+.menu-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 380px;
+    height: 100vh;
+    background: #0a0a0a;
+    border-left: 1px solid #333;
+    z-index: 30;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    font-family: monospace;
+}
+
+.menu-panel.open {
+    right: 0;
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #333;
     font-size: 14px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.close-btn {
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.menu-section {
+    padding: 16px 20px;
+    border-bottom: 1px solid #222;
+}
+
+.menu-section h3 {
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    color: #888;
+}
+
+.menu-section p {
+    font-size: 14px;
+    margin: 8px 0;
+    color: #ccc;
+}
+
+.menu-section span {
+    color: #fff;
+    font-weight: bold;
+}
+
+.menu-footer {
+    padding: 16px 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    border-top: 1px solid #222;
+    margin-top: auto;
+}
+
+.menu-footer span {
+    cursor: pointer;
+    padding: 8px 16px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.menu-footer span:hover {
+    background: #222;
+    border-color: #555;
+}
+
+#menuQuests {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.quest-item {
+    margin: 8px 0;
+    padding: 4px 0;
+    border-bottom: 1px dotted #222;
+}
+
+.quest-item.completed {
+    text-decoration: line-through;
+    color: #444;
 }
