@@ -1,33 +1,56 @@
-// utils.js — вспомогательные функции
-function getRandomFreeSpot(map, tileSize) {
-    const rows = map.length;
-    const cols = map[0].length;
-    let free = [];
-    for (let i = 1; i < rows-1; i++) {
-        for (let j = 1; j < cols-1; j++) {
-            if (map[i][j] === 0) free.push({ x: j * tileSize, y: i * tileSize });
-        }
-    }
-    if (free.length === 0) return { x: 60, y: 60 };
-    let r = Math.floor(Math.random() * free.length);
-    return free[r];
+// core/utils.js — вспомогательные функции
+
+/**
+ * Случайное целое число от min до max (включительно)
+ */
+export function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function isSolid(x, y, w, h, map, tileSize) {
-    let left = Math.floor(x / tileSize);
-    let right = Math.floor((x + w - 1) / tileSize);
-    let top = Math.floor(y / tileSize);
-    let bottom = Math.floor((y + h - 1) / tileSize);
-    const rows = map.length;
-    const cols = map[0].length;
-    left = Math.max(0, left);
-    right = Math.min(cols-1, right);
-    top = Math.max(0, top);
-    bottom = Math.min(rows-1, bottom);
-    for (let i = top; i <= bottom; i++) {
-        for (let j = left; j <= right; j++) {
-            if (map[i][j] === 1) return true;
-        }
+/**
+ * Случайный элемент из массива
+ */
+export function randomChoice(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+/**
+ * Перемешивание массива (Fisher-Yates)
+ */
+export function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return false;
+    return array;
+}
+
+/**
+ * Преобразование пикселей в номер клетки
+ */
+export function pxToTile(px, tileSize) {
+    return Math.floor(px / tileSize);
+}
+
+/**
+ * Преобразование номера клетки в пиксели
+ */
+export function tileToPx(tile, tileSize) {
+    return tile * tileSize;
+}
+
+/**
+ * Форматирование времени (секунды → MM:SS)
+ */
+export function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+/**
+ * Глубокое копирование простого объекта (не для классов!)
+ */
+export function cloneObject(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }
