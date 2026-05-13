@@ -168,11 +168,21 @@ export function getItemPositions(tileSize, rows, cols) {
 }
 
 export function getStartPositions(tileSize, rows, cols) {
+    const turns = [
+        { x: 6, y: 3 },
+        { x: 6, y: 15 },
+        { x: 25, y: 15 },
+        { x: 25, y: 30 },
+        { x: 6, y: 30 },
+        { x: 6, y: 45 },
+        { x: 35, y: 45 }
+    ];
+    
     return {
         // Мышь в начале змейки
         mouse: { x: 6 * tileSize + 5, y: 3 * tileSize + 5 },
-        // Кот позади мыши (через 3 тайла)
-        cat: { x: 6 * tileSize, y: 6 * tileSize },
+        // Кот в конце змейки — далеко от мыши
+        cat: { x: turns[turns.length - 1].x * tileSize, y: turns[turns.length - 1].y * tileSize },
         dog: { x: 0, y: 0 }
     };
 }

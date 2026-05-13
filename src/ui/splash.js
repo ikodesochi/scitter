@@ -1,5 +1,5 @@
 // ui/splash.js
-// Заставка входа в игру — кот с красными глазами, мышь с жёлтыми
+// Заставка при запуске игры — череп в ASCII
 
 export function showSplash(callback) {
     const overlay = document.createElement('div');
@@ -17,63 +17,60 @@ export function showSplash(callback) {
     `;
     
     const pre = document.createElement('pre');
-    pre.style.cssText = 'color: #888; font-size: 11px; line-height: 1.2; text-align: center;';
+    pre.style.cssText = 'color: #444; font-size: 5px; line-height: 1; text-align: center;';
+    pre.textContent = `
+▊▉▌▏         ▏▊▃▏                  
+                                                                 ▁ ▎▉▌▏     ▏▎▉▆█▎                  
+                                                                 ▉▏▏ ▋▂▁▂▁▃▂▋▊▍▇█▍                  
+                              ▋▋▌▌▉▍       ▎▎▃▆▅▉▍               ▊▌   ▎▁▉▃▋▊ ▏▊▇▆▎                  
+                             ▋▎   ▏▂▍▊▏ ▏▌▌▋▂█▇▍▏▁               ▏▎    ▎▎▍▍▏  ▎█▆▎                  
+                             ▁    ▎▁▃▃▏ ▏▎▌▉▇▅▉  ▂               ▎▌▌▊▂▃▊  ▌▃▄▉▂██▊                  
+                             ▏▊▍▎▎▉▉▏ ▊▃▊  ▋▇▇▂▊▊▌               ▄▍▋▍▎▏▎▏▎▌▎▎▉▆██▋                  
+                               ▏▊█▂▏  ▍▊▌  ▏▋█▃                  ▎▃▌▍▏▏ ▋▃▏ ▌▉▅▆▉                   
+                              ▍▉▄▇▄▆▃▂▊▋▍▏ ▎▎▃▆                    ▁▉▁▉▉▌▍▄█▇▅▅▆▎                   
+            ▏▍             ▏▏▎▏  ▉█▆▅▅▅▃▄▁▌▂█▅▌                    ▂▏▏▌▅████████▆▌                  
+              ▏           ▎▌▏     ▊▇███████▇█▍                    ▏▌   ▏▍▊▁▃██████▁                 
+               ▎         ▌▌   ▎▌ ▎▅█▌▋▇██████▇▍                   ▊     ▏▏▏ ▏▂█████▅▏               
+               ▍        ▋▌    ▋▃ ▏▂█▅▍▏▄███████▉▏                ▏▃        ▏  ██████▅▏              
+              ▋▍       ▏▁     ▎▃▆▄▂▉▂▂▊▆█████▃▄▃▍▏               ▏▂▎  ▎     ▏▃▆██████▂▏             
+            ▏▉▎        ▍▊   ▏▌▍ ▊▇███▅▉▃█████▊ ▏▏▏                ▉▄▎▊▏▌▌  ▍▎▏▌▆██████▎             
+           ▍▋▏         ▍▅▎    █▁▂████████████▋                  ▍ ▏▆▂▌▏ ▆▁▍▃▏▏▊██████▆▏             
+           ▂           ▎▆▂▏  ▋██████████████▅                    ▊▌▃▇▍  ▃█▇▂  ▁██████▂              
+         ▎▎▎            ▍█▇▆▆██████████████▅▎                    ▎▃▄█▂  ▂██▉ ▌▇█████▅▏              
+          ▋▊▍▏▏      ▎▎▋▂████████████████▇▁▏                     ▎▍▁▃▍  ▉██▎  ▌▅█████▆▂▁▁▊▌▍        
+      ▎▌▌▉▁▃▅▅▄▁▁▁▄▇▇▄▊▊▊▋▊▆█▁▂▉▄▇███▇████▇▃▅▆▆▆▉▋▋▌       ▎▌▌▂▃▂▆▇▆▂▃▉▃▄▇▇▃▁▄▁▄█████████▅▅▅▄▁▌▏    
+                 ▏▍▍▍▏▏▏▏▏▏▎▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▎                 ▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▎           
+`;
+    
     overlay.appendChild(pre);
+    
+    // Название и подсказка
+    const info = document.createElement('div');
+    info.style.cssText = 'text-align: center; margin-top: 20px;';
+    info.innerHTML = `
+        <div style="color: #888; font-size: 28px; font-weight: bold; font-family: monospace; letter-spacing: 4px;">SKITTER</div>
+        <div style="color: #666; font-size: 12px; margin-top: 10px; font-family: monospace;">Mouse vs Cat — Survival Maze</div>
+        <div style="color: #444; font-size: 10px; margin-top: 15px; font-family: monospace;">press any key to start</div>
+    `;
+    overlay.appendChild(info);
+    
     document.body.appendChild(overlay);
     
-    // Кадры: кот с красными глазами, мышь с жёлтыми
-    const frames = [
-        {
-            cat: ` _._     _,-'""\`-._\n(,-.\`._,'(       |\\\`-/|\n    \`-.-' \\ )-\`( , <span style="color:#f00">o o</span>)\n          \`-    \\\`_\"'-\``,
-            mouse: `              (\\_/)\n      .-\"\"-.-.-' <span style="color:#ff0">o o</span>\n     /  \\      _.--'\n    (\\  /_---\\\\_\\_\n     \`'-.\n       ,__)`
-        },
-        {
-            cat: ` _._     _,-'""\`-._\n(,-.\`._,'(       |\\\`-/|\n    \`-.-' \\ )-\`( , <span style="color:#f00">> <</span>)\n          \`-    \\\`_\"'-\``,
-            mouse: `              (\\_/)\n      .-\"\"-.-.-' <span style="color:#ff0">O o</span>\n     /  \\      _.--'\n    (\\  /_---\\\\_\\_\n     \`'-.\n       ,__)`
-        },
-        {
-            cat: ` _._     _,-'""\`-._\n(,-.\`._,'(       |\\\`-/|\n    \`-.-' \\ )-\`( , <span style="color:#f00"># #</span>)\n          \`-    \\\`_\"'-\``,
-            mouse: `              (\\_/)\n      .-\"\"-.-.-' <span style="color:#ff0">@ @</span>\n     /  \\      _.--'\n    (\\  /_---\\\\_\\_\n     \`'-.\n       ,__)`
-        }
-    ];
-    
-    const logo = 
-        '   ███████╗ ██╗  ██╗ ██╗ ████████╗ ████████╗ ███████╗ ██████╗ \n' +
-        '   ██╔════╝ ██║ ██╔╝ ██║ ╚══██╔══╝ ╚══██╔══╝ ██╔════╝ ██╔══██╗\n' +
-        '   ███████╗ ██████╔╝ ██║    ██║       ██║    █████╗   ██████╔╝\n' +
-        '   ╚════██║ ██╔═██╗ ██║    ██║       ██║    ██╔══╝   ██╔══██╗\n' +
-        '   ███████║ ██║  ██╗██║    ██║       ██║    ███████╗ ██║  ██║\n' +
-        '   ╚══════╝ ╚═╝  ╚═╝╚═╝    ╚═╝       ╚═╝    ╚══════╝ ╚═╝  ╚═╝';
-    
-    let frameIndex = 0;
-    let animationTimer = null;
-    let blinkVisible = true;
-    
-    function animate() {
-        frameIndex = (frameIndex + 1) % frames.length;
-        blinkVisible = !blinkVisible;
-        
-        const blink = blinkVisible ? 'Press any key to start...' : '                           ';
-        const f = frames[frameIndex];
-        
-        pre.innerHTML = 
-            f.cat + '\n' +
-            '          vs\n' +
-            f.mouse + '\n\n' +
-            logo + '\n\n' +
-            '          [WASD] move  [E] shop  [ESC] menu\n\n' +
-            '        ' + blink;
-        
-        animationTimer = setTimeout(animate, 600);
-    }
-    
-    animate();
+    // Мигание подсказки
+    let blink = true;
+    const blinkTimer = setInterval(() => {
+        blink = !blink;
+        info.children[2].style.opacity = blink ? '1' : '0';
+    }, 500);
     
     const start = () => {
-        clearTimeout(animationTimer);
+        clearInterval(blinkTimer);
         overlay.style.opacity = '0';
         overlay.style.transition = 'opacity 0.3s';
-        setTimeout(() => { overlay.remove(); callback(); }, 300);
+        setTimeout(() => {
+            overlay.remove();
+            callback();
+        }, 300);
         window.removeEventListener('keydown', start);
         window.removeEventListener('click', start);
     };

@@ -1,6 +1,5 @@
 // ui/levelIntro.js
-// Заставки уровней с анимированным котом и мышью
-// Глаза кота и мыши подсвечены цветом
+// Заставки уровней с анимированными ASCII-артами
 
 const levelThemes = [
     {
@@ -9,7 +8,8 @@ const levelThemes = [
         catEyes: 'o o', catColor: '#ff0',
         mouseEyes: 'o o', mouseColor: '#fff',
         decor: '┌──┐  ┌──┐  ┌──┐',
-        color: '#aaa'
+        color: '#aaa',
+        type: 'cat'
     },
     {
         name: 'DARKNESS',
@@ -17,7 +17,8 @@ const levelThemes = [
         catEyes: '> <', catColor: '#ff6600',
         mouseEyes: 'O o', mouseColor: '#ffff00',
         decor: '· · · · · · · ·',
-        color: '#555'
+        color: '#555',
+        type: 'mouse'
     },
     {
         name: 'STREET',
@@ -25,15 +26,17 @@ const levelThemes = [
         catEyes: '> <', catColor: '#ff4400',
         mouseEyes: 'O o', mouseColor: '#ffff00',
         decor: '┌────┐  ┌────┐',
-        color: '#aaa'
+        color: '#aaa',
+        type: 'mouse'
     },
     {
         name: 'FRIENDSHIP',
         sub: 'Protect the Pack',
         catEyes: '> <', catColor: '#ff4400',
         mouseEyes: 'o o', mouseColor: '#fff',
-        decor: '  <3   WOOF!',
-        color: '#aaa'
+        decor: '',
+        color: '#aaa',
+        type: 'dog'
     },
     {
         name: 'TRAPS',
@@ -41,7 +44,8 @@ const levelThemes = [
         catEyes: '# #', catColor: '#ff0000',
         mouseEyes: '@ @', mouseColor: '#ffff00',
         decor: '▲ ▲ ▲ ▲ ▲ ▲',
-        color: '#a44'
+        color: '#a44',
+        type: 'mouse'
     },
     {
         name: 'FINAL BOSS',
@@ -49,18 +53,74 @@ const levelThemes = [
         catEyes: '# #', catColor: '#ff0000',
         mouseEyes: '@ @', mouseColor: '#ffff00',
         decor: '█▓█▓█▓█▓█▓█▓',
-        color: '#f44'
+        color: '#f44',
+        type: 'mouse'
     }
 ];
 
-// Генерация ASCII с цветными глазами
-function buildFrame(catEyes, catColor, mouseEyes, mouseColor, decor) {
+// Кадры анимации собаки (буквы меняются создавая движение)
+const dogFrames = [
+    // Кадр 1 — без сердца
+    `ZXXZYYY                                               
+                                             VGAAHAAFW       YVPPPUW               XZ               
+                                             UDAAAAADW      RPU ZHBALX             HR               
+                                              YODACPY   YURSMYMV AAAAP            MQH               
+                                                ZQZ     WBJ      JBINCQ          PLSN               
+                                ZVRSQOXMPRQ              WO Z ZUW XNBHVQQQQQQQQPPURQZ               
+                                XL   ODGNNKN               QSSRJJHCIT           ZMU                 
+                            WQQQOKZ   ZUZYUXPQWYV               TDS               PS                 
+                          WOT   ZTPPPW  YRUXXSPS                F            TY  PS                 
+                          NS  ZUYZYYZZOV XYTNUNU                VIUXS S    YSHX  PS                 
+                          NS ZZYYVY   ZPJBNRRW                  EIBF DJOQQNDALZ UN                 
+                         ZQJT    SN  YUPHKI                     ZF KL J      LBCO H                 
+            YXTQQQQQQQQQQOMJMPPOLHGQQIKSRZX                     LOTGPZI     PEADPYJ                 
+            TNPRRRRRRRRRSWY  PQSSRPVPRRSQ                       WWWNRRX     XWWORQY                 `,
+    // Кадр 2 — сердце
+    `ZXXZYYY                                               
+                                             VGAAHAAFW       YVPPPUW               XZ               
+                                             UDAAAAADW      RPU ZHBALX             HR               
+                                              YODACPY   YURSMYMV AAAAP            MQH               
+                                                ZQZ     WBJ      JBINCQ          PLSN               
+                                ZVRSQOXMPRQ              WO Z ZUW XNBHVQQQQQQQQPPURQZ               
+                                XL   ODGNNKN               QSSRJJHCIT           ZMU                 
+                            WQQQOKZ   ZUZYUXPQWYV               TDS               PS                 
+                          WOT   ZTPPPW  YRUXXSPS                F            TY  PS                 
+                          NS  ZUYZYYZZOV XYTNUNU                VIUXS S    YSHX  PS                 
+                          NS ZZYYVY   ZPJBNRRW                  EIBF DJOQQNDALZ UN                 
+                         ZQJT    SN  YUPHKI                     ZF KL J      LBCO H                 
+            YXTQQQQQQQQQQOMJMPPOLHGQQIKSRZX                     LOTGPZI     PEADPYJ                 
+            TNPRRRRRRRRRSWY  PQSSRPVPRRSQ                       WWWNRRX     XWWORQY                 
+                                                                           <3`,
+    // Кадр 3 — два сердца
+    `ZXXZYYY                                               
+                                             VGAAHAAFW       YVPPPUW               XZ               
+                                             UDAAAAADW      RPU ZHBALX             HR               
+                                              YODACPY   YURSMYMV AAAAP            MQH               
+                                                ZQZ     WBJ      JBINCQ          PLSN               
+                                ZVRSQOXMPRQ              WO Z ZUW XNBHVQQQQQQQQPPURQZ               
+                                XL   ODGNNKN               QSSRJJHCIT           ZMU                 
+                            WQQQOKZ   ZUZYUXPQWYV               TDS               PS                 
+                          WOT   ZTPPPW  YRUXXSPS                F            TY  PS                 
+                          NS  ZUYZYYZZOV XYTNUNU                VIUXS S    YSHX  PS                 
+                          NS ZZYYVY   ZPJBNRRW                  EIBF DJOQQNDALZ UN                 
+                         ZQJT    SN  YUPHKI                     ZF KL J      LBCO H                 
+            YXTQQQQQQQQQQOMJMPPOLHGQQIKSRZX                     LOTGPZI     PEADPYJ                 
+            TNPRRRRRRRRRSWY  PQSSRPVPRRSQ                       WWWNRRX     XWWORQY                 
+                                                                           <3<3`
+];
+
+function buildCatFrame(catEyes, catColor, decor) {
     return `
                         _._     _,-'\`\`\`-._
                        (,-.\`._,'(       |\\\`-/|
                            \`-.-' \\ )-\`( , <span style="color:${catColor}">${catEyes}</span>)
                                  \`-    \\\`_\`\"'-\`
                       
+                      ${decor}`;
+}
+
+function buildMouseFrame(mouseEyes, mouseColor, decor) {
+    return `
                               (\\_/)
                       .-\"\"-.-.-' <span style="color:${mouseColor}">${mouseEyes}</span>
                      /  \\      _.--'
@@ -77,7 +137,6 @@ export function showLevelIntro(levelIndex, callback) {
     const theme = levelThemes[levelIndex];
     let frame = 0;
     
-    // Последовательность моргания
     const catSeq = [theme.catEyes, theme.catEyes.replace(' ', ''), theme.catEyes];
     const mouseSeq = [theme.mouseEyes, theme.mouseEyes.replace(' ', ''), theme.mouseEyes];
     
@@ -96,7 +155,9 @@ export function showLevelIntro(levelIndex, callback) {
     `;
     
     const pre = document.createElement('pre');
-    pre.style.cssText = `color: ${theme.color}; font-size: 9px; line-height: 1.05; text-align: center; margin: 0;`;
+    const fontSize = theme.type === 'dog' ? '4px' : '9px';
+    const lineHeight = theme.type === 'dog' ? '1' : '1.05';
+    pre.style.cssText = `color: ${theme.color}; font-size: ${fontSize}; line-height: ${lineHeight}; text-align: center; margin: 0;`;
     overlay.appendChild(pre);
     
     const title = document.createElement('div');
@@ -121,10 +182,29 @@ export function showLevelIntro(levelIndex, callback) {
     
     document.body.appendChild(overlay);
     
+    const updateFrame = () => {
+    if (theme.type === 'cat') {
+        pre.innerHTML = buildCatFrame(catSeq[frame], theme.catColor, theme.decor);
+    } else if (theme.type === 'dog') {
+        let art = dogFrames[frame];
+        // Подсветка сердца красным
+        art = art.replace(/<3/g, '<span style="color:#f00">&lt;3</span>');
+        pre.innerHTML = art;
+    } else {
+        pre.innerHTML = buildMouseFrame(mouseSeq[frame], theme.mouseColor, theme.decor);
+    }
+};
+    
     const animTimer = setInterval(() => {
-        frame = (frame + 1) % catSeq.length;
-        pre.innerHTML = buildFrame(catSeq[frame], theme.catColor, mouseSeq[frame], theme.mouseColor, theme.decor);
-    }, 500);
+        if (theme.type === 'dog') {
+            frame = (frame + 1) % dogFrames.length;
+        } else {
+            frame = (frame + 1) % catSeq.length;
+        }
+        updateFrame();
+    }, theme.type === 'dog' ? 400 : 500);
+    
+    updateFrame();
     
     const timeout = setTimeout(() => finish(), 2500);
     
@@ -141,6 +221,4 @@ export function showLevelIntro(levelIndex, callback) {
     
     window.addEventListener('keydown', skip);
     window.addEventListener('click', skip);
-    
-    pre.innerHTML = buildFrame(catSeq[0], theme.catColor, mouseSeq[0], theme.mouseColor, theme.decor);
 }
