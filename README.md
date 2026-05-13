@@ -1,4 +1,7 @@
-# Scitter
+## README.md
+
+```markdown
+# Scitter — Мышь против Кота
 
 **Добро пожаловать в команду юных разработчиков iKODe!**
 
@@ -10,9 +13,22 @@
 
 ## 📖 Легенда игры
 
-Ты — мышка **Pixel**. Кот **Nyx** охотится за тобой в подземном бункере. Твоя задача — убегать, собирать бонусы, избегать ловушек и держаться как можно дольше. С каждым уровнем кот становится быстрее, препятствий — больше.
+Ты — мышка **Pixel**. Кот **Nyx** охотится за тобой в подземном бункере. Твоя задача — собирать сыр, избегать кота и ловушек, кормить собаку костями и находить выход через лунку.
 
-Твоя команда управляет каждым элементом игры: персонажами, текстурами, предметами, уровнями, препятствиями и даже пасхалками.
+С каждым уровнем кот становится быстрее, препятствий — больше. Между уровнями ты попадаешь в **вентиляцию** — секретное место, где таракан-торговец продаёт улучшения за сыр.
+
+---
+
+## 🎨 Визуальный стиль
+
+Игра в **чёрно-белом минимализме**:
+
+- Персонажи — прямоугольники с ASCII-смайликами (`o_o`, `-_-`, `@_@`)
+- Стены тёмные с кирпичной текстурой
+- Сыр жёлтый с дырочками
+- Кости белые
+- Лунка тёмно-жёлтая с рябью
+- Меню паузы — ASCII-графика
 
 ---
 
@@ -22,206 +38,131 @@
 
 - **Основная (main) ветка** — стабильная версия игры. Здесь код, который точно работает.
 - **Твоя личная ветка** — место для экспериментов. Меняй, пробуй, ошибайся. Ничего не сломается.
-- **Pull Request (PR)** — твоя заявка на добавление своего кода в основную игру. Я (преподаватель) проверяю и сливаю изменения.
+- **Pull Request (PR)** — твоя заявка на добавление своего кода в основную игру. Я проверяю и сливаю изменения.
 
 ---
 
-## 🗂️ СТРУКТУРА ПРОЕКТА SKITTER
+## 🗂️ СТРУКТУРА ПРОЕКТА
 
-    LICENSE
-    README.md
+```
+skitter/
+	LICENSE
+	README.md
+	CHANGELOG.md
 
-    src/
+	src/
+		index.html
+		style.css
+		game.js
 
-        index.html
-        style.css
-        game.js
-        storage.js
-        messages.json
+		core/
+			constants.js
+			physics.js
+			utils.js
+			character.js
 
-        core/
+		entities/
+			mouse.js
+			cat.js
+			dog.js
+			cockroach.js
 
-            constants.js
-            physics.js
-            utils.js
+		systems/
+			levelManager.js
+			gameManager.js
+			input.js
+			renderer.js
+			audio.js
+			achievements.js
+			admin.js
+			shop.js
+			shopLevel.js
 
-        entities/
+		world/
+			worldGenerator.js
+			worldRenderer.js
+			camera.js
 
-            Mouse.js
-            Cat.js
-            Dog.js
+		levels/
+			levelData.js
+			level_meeting.js
+			level_street.js
 
-        systems/
+		traps/
+			oil_slick.js
+			spikes.js
+			disappearing_platform.js
+			resetTraps.js
 
-            input.js
-            audio.js
-            achievements.js
-            levelManager.js
+		ui/
+			menu.js
 
-        scripts/
+		quests/
+			questManager.js
+			questList.js
 
-            eastereggs.js
-            dialogs.js
-            obstacles.js
+		inventory/
+			inventory.js
 
-        traps/
+	assets/
+		sprites/
+		items/
+		sounds/
+		backgrounds/
+		tiles/
+		objects/
+		decorations/
+		textures/
+		levels/
 
-            oil_slick.js
-            spikes.js
-            disappearing_platform.js
+	docs/
+		GLOSSARY.md
+		CODESTYLE.md
+		SPRINTS.md
+		ROADMAP.md
 
-        levels/
+	.github/
+		pull_request_template.md
+```
 
-            level_meeting.js
-            level_cat_speed.js
-            level_dog.js
-            level_darkness.js
-            level_traps.js
-            level_final.js
-
-        characters/
-
-            character_data.json
-
-        ui/
-
-            main_menu.html
-            pause_menu.html
-            game_over.html
-
-        world/
-
-            worldGenerator.js
-            tileManager.js
-            camera.js
-
-        quests/
-
-            questManager.js
-            questList.js
-
-        inventory/
-
-            inventory.js
-
-    assets/
-
-        sprites/
-
-            cat_idle.png
-            cat_run.png
-            cat_attack.png
-            mouse_idle.png
-            mouse_run.png
-            mouse_scared.png
-
-        lighting/
-
-            shadows.png
-
-        sounds/
-
-            meow.wav
-            cheese.wav
-            victory.wav
-            gameover.wav
-
-        backgrounds/
-
-            level1_sky.png
-            level1_ground.png
-            level2_sky.png
-            level2_ground.png
-            level3_sky.png
-            level3_ground.png
-            level4_sky.png
-            level4_ground.png
-            level5_sky.png
-            level5_ground.png
-
-        tiles/
-
-            grass.png
-            stone.png
-            wood.png
-
-        objects/
-
-            chest.png
-            sign.png
-            crate.png
-
-        decorations/
-
-            tree.png
-            bush.png
-            lantern.png
-
-    docs/
-
-        GLOSSARY.md
-        CODESTYLE.md
-        SPRINTS.md
-        ROADMAP.md
-
-        logic/
-
-            cat_movement.drawio
-            cheese_collection.drawio
-            lure_logic.drawio
-
-    issues/
-
-        bug_reports.md
-
-    .github/
-
-        pull_request_template.md
 ---
 
 ## 🛠️ Как начать работать (пошагово)
 
 ### 1. Скачай проект к себе на компьютер
 
-- Открой **VS Code** или любой редактор кода.
-- Открой терминал (Ctrl + `) и напиши:
+Открой **VS Code** и в терминале (Ctrl + `) напиши:
 
 ```bash
-git clone https://github.com/твой-логин/termix-cat-and-mouse.git
-cd termix-cat-and-mouse
+git clone https://github.com/termixu/scitter.git
+cd scitter
 ```
 
 ### 2. Создай свою ветку
-
-Напиши в терминале:
 
 ```bash
 git checkout -b feature/твоя_роль
 ```
 
-Примеры: feature/characters, feature/levels, feature/easter-eggs.
+Примеры: `feature/characters`, `feature/levels`, `feature/traps`, `feature/easter-eggs`.
 
 ### 3. Открой игру в браузере
 
-· Если у тебя есть расширение Live Server в VS Code → нажми правой кнопкой на index.html → Open with Live Server.
-· Или просто открой файл index.html двойным кликом.
+- Если есть **Live Server** в VS Code → правой кнопкой на `index.html` → **Open with Live Server**
+- Или открой файл `index.html` двойным кликом
 
 ### 4. Начни кодить
 
-· Все изменения делай в своей ветке.
-· Комментируй сложные места (чтобы я понял).
-· Проверяй, что игра не сломалась.
+- Все изменения делай в своей ветке
+- Комментируй сложные места
+- Проверяй, что игра не сломалась (открой консоль F12)
 
 ### 5. Сохрани изменения (коммит)
-
-В терминале:
 
 ```bash
 git add .
 git commit -m "коротко опиши, что сделал"
 ```
-
-Пример: "Добавил спрайт кота с анимацией бега"
 
 ### 6. Отправь код в GitHub
 
@@ -231,68 +172,63 @@ git push origin feature/твоя_роль
 
 ### 7. Создай Pull Request (PR)
 
-· Зайди в репозиторий на GitHub.
-· Нажми Pull requests → New pull request.
-· Выбери свою ветку → base: main.
-· Напиши, что сделал (можно на русском).
-· Нажми Create pull request.
+- Зайди в репозиторий на GitHub
+- Нажми **Pull requests → New pull request**
+- Выбери свою ветку → **base: main**
+- Напиши, что сделал
+- Нажми **Create pull request**
 
 ### 8. Жди проверки
 
-Я посмотрю код, оставлю комментарии (если нужно). Если всё ок — я солью изменения в main. Твоя работа попадёт в игру!
+Я посмотрю код, оставлю комментарии. Если всё ок — солью изменения в main. Твоя работа попадёт в игру!
 
 ---
 
-## 📌 Правила разработки (чтобы код работал у всех)
+## 📌 Правила разработки
 
-· Не меняй game.js глобально — только добавляй свои функции и вызывай их там, где написано // TODO.
-· Спрайты и картинки клади в правильные папки (sprites/, textures/, items/).
-· Названия файлов пиши латиницей, без пробелов.
-· Коммиты делай часто, но по делу.
-· Не удаляй чужой код. Если нужно изменить — спроси в чате.
+- Не меняй `game.js` глобально — добавляй функции и вызывай их где `// TODO`
+- Спрайты и картинки клади в правильные папки
+- Названия файлов: **латиница, без пробелов, lowercase**
+- Коммиты делай часто, но по делу
+- Не удаляй чужой код. Если нужно изменить — спроси в чате
+- Стиль кода: **чёрно-белый минимализм, ASCII-смайлы**
 
 ---
 
-## 🧪 Пример: как добавить свой предмет (сыр)
+## 🎮 Управление в игре
 
-```javascript
-// 1. Добавь картинку сыра в папку assets/items/
+- Стрелки / WASD — движение мыши
+- E — открыть магазин (рядом с тараканом)
+- ESC — пауза / меню
+- Набрать `admin` — включить админ-режим
 
-// 2. В скрипте items.js (или в своём) напиши:
-const cheese = { x: 300, y: 200, width: 20, height: 20, collected: false };
+---
 
-function drawCheese() {
-    if (!cheese.collected) {
-        ctx.drawImage(cheeseImg, cheese.x, cheese.y, cheese.width, cheese.height);
-    }
-}
+## 👑 Админ-режим
 
-function collectCheese() {
-    // проверка столкновения мыши с сыром
-    if (mouse.x < cheese.x + cheese.width && ... ) {
-        cheese.collected = true;
-        score += 50;
-    }
-}
+Набери слово `admin` на клавиатуре. Справа появится панель:
 
-// 3. Вызови функции в игровом цикле game.js
-```
-
-По такому же принципу ты добавишь ловушки, препятствия, пасхалки и анимации.
+- N — NoClip (ходить сквозь стены)
+- G — GodMode (бессмертие)
+- S — Speed (ускорение)
+- I — Info (отладка)
+- 1 — Уровень 1
+- 2 — Уровень 2
+- 0 — Вентиляция
 
 ---
 
 ## ❓ Частые вопросы
 
-Что делать, если я ошибся в коде и игра сломалась?
+**Что делать, если я ошибся и игра сломалась?**
 
-Ничего страшного. Ты работаешь в своей ветке, main не пострадала. Можешь откатиться к последнему сохранению:
+Ты в своей ветке, main не пострадала:
 
 ```bash
-git checkout .  # откатит все изменения в текущей папке
+git checkout .   # откатить все изменения
 ```
 
-Как получить последние изменения из main?
+**Как получить последние изменения из main?**
 
 ```bash
 git checkout main
@@ -301,23 +237,23 @@ git checkout feature/твоя_роль
 git merge main
 ```
 
-Можно ли добавить свою идею, которой нет в списке?
+**Можно ли добавить свою идею?**
 
-Да, конечно. Обсуди это в командном чате. Лучшие идеи мы добавим в игру!
+Да! Обсуди в чате. Лучшие идеи попдут в игру.
 
 ---
 
 ## 🏆 Что будет в конце?
 
-### Полностью работающая игра в браузере.
-### Твоё имя в истории коммитов GitHub (портфолио для будущего).
-### Возможность показать игру родителям и друзьям.
+- Полностью работающая игра в браузере
+- Твоё имя в истории коммитов GitHub (портфолио!)
+- Возможность показать игру родителям и друзьям
 
 ---
 
 ## 🎬 Поехали!
 
-Создай свою ветку, открой index.html и начинай творить. Если застрял — пиши в чат или зови на помощь. 
+Создай свою ветку, открой `index.html` и начинай творить.
 
 ```bash
 git checkout -b feature/твоя_роль
