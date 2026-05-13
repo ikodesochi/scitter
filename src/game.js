@@ -1,170 +1,163 @@
 // game.js
+// Главный файл игры — запускает всё и управляет игровым циклом
+
 import { W, H, TILE_SIZE } from './core/constants.js';
-import { initInput, keys } from './systems/input.js';
+import { initInput, processInput } from './systems/input.js';
 import { 
-    initLevel, 
-    getWorldMap, 
-    getMouse, 
-    getCat, 
-    getDog, 
-    getCheeses,
-    getBones,
-    getHole,
-    getCheeseCount,
-    getBoneCount,
-    getTotalCheeseGoal,
-    getTotalBoneGoal,
-    getCheeseCollectedForCat,
-    isGameActive,
-    setGameActive,
-    resetLevel
+    initLevel, getMouse, getCat, getDog, getExtraCats, getCockroach,
+    isGameActive, resetLevel,
+    getCurrentLevelInfo, isInShop,
+    getCheeseCount, enterShop, getWorldMap,
+    goToLevel, toggleHole, setCheeseBoost, setBoneBoost,
+    updatePipeSpawns
 } from './systems/levelManager.js';
-import { updateGame } from './systems/gameManager.js';
-import { updateCamera, getCamera } from './world/camera.js';
-import { drawWorld } from './world/worldRenderer.js';
+import { updateGame, setTryMove } from './systems/gameManager.js';
+import { updateCamera } from './world/camera.js';
+import { render } from './systems/renderer.js';
 import { loadSounds } from './systems/audio.js';
 import { initAchievements } from './systems/achievements.js';
 import { initMenu } from './ui/menu.js';
+import { openShop, isShopOpen, initShopInput } from './systems/shop.js';
+import { initAdmin, isNoclip, isGodmode, isSpeedBoost, isShowInfo } from './systems/admin.js';
+import { showSplash } from './ui/splash.js';
+import { showLevelIntro } from './ui/levelIntro.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
 canvas.width = W;
 canvas.height = H;
 
-function isSolid(x, y, w, h) {
-    const left = Math.floor(x / TILE_SIZE);
-    const right = Math.floor((x + w - 1) / TILE_SIZE);
-    const top = Math.floor(y / TILE_SIZE);
-    const bottom = Math.floor((y + h - 1) / TILE_SIZE);
-    const worldMap = getWorldMap();
-    if (!worldMap) return true;
-    if (left < 0 || right >= worldMap[0].length || top < 0 || bottom >= worldMap.length) return true;
-    for (let i = top; i <= bottom; i++) {
-        for (let j = left; j <= right; j++) {
-            const tile = worldMap[i][j];
-            if (tile === 1 || tile === 2 || tile === 4 || tile === 5) return true;
-        }
-    }
-    return false;
-}
-
-function tryMove(obj, dx, dy) {
-    const newX = obj.x + dx;
-    const newY = obj.y + dy;
-    if (!isSolid(newX, obj.y, obj.w, obj.h)) obj.x = newX;
-    if (!isSolid(obj.x, newY, obj.w, obj.h)) obj.y = newY;
-}
-
-function resetGameCallback() {
-    resetLevel();
-    setGameActive(true);
-}
+let lastLevel = -1;
 
 async function initGame() {
     await loadSounds();
     initAchievements();
     initInput();
+    initShopInput();
+    initAdmin();
     initLevel();
-    initMenu(resetGameCallback);
-    update();
+    initMenu();
+    setTryMove(processInput.tryMove);
+    
+    window._skipToLevel = (i) => {
+        goToLevel(i);
+        showLevelIntro(i, () => { lastLevel = i; });
+    };
+    window._enterShop = () => enterShop();
+    window._toggleHole = () => toggleHole();
+    window._setCheeseBoost = (on) => setCheeseBoost(on);
+    window._setBoneBoost = (on) => setBoneBoost(on);
+    
+    showLevelIntro(0, () => {
+        lastLevel = 0;
+        update();
+    });
 }
 
 function update() {
-    if (!isGameActive()) return;
-    
-    const mouse = getMouse();
-    const cat = getCat();
-    const dog = getDog();
-    
-    if (!mouse || !cat || !dog) return;
-    
-    let dx = 0, dy = 0;
-    if (keys.ArrowLeft) dx = -mouse.speed;
-    if (keys.ArrowRight) dx = mouse.speed;
-    if (keys.ArrowUp) dy = -mouse.speed;
-    if (keys.ArrowDown) dy = mouse.speed;
-    if (dx !== 0 || dy !== 0) tryMove(mouse, dx, dy);
-    
-    const cheeseForCat = getCheeseCollectedForCat();
-    cat.update(mouse, tryMove, cheeseForCat);
-    
-    const dogDx = mouse.x - dog.x;
-    const dogDy = mouse.y - dog.y;
-    const dogDist = Math.hypot(dogDx, dogDy);
-    if (dogDist > 100) {
-        const step = Math.min(dog.speed, dogDist);
-        tryMove(dog, (dogDx / dogDist) * step, (dogDy / dogDist) * step);
+    if (isGameActive() && !isShopOpen()) {
+        const mouse = getMouse();
+        const cat = getCat();
+        const dog = getDog();
+        const extraCats = getExtraCats();
+        const cockroach = getCockroach();
+        
+        const levelInfo = getCurrentLevelInfo();
+        if (levelInfo && levelInfo.id > 0 && levelInfo.id - 1 !== lastLevel) {
+            lastLevel = levelInfo.id - 1;
+            showLevelIntro(lastLevel, () => {});
+        }
+        
+        if (mouse) {
+            // NOCLIP
+            if (isNoclip()) {
+                if (!processInput._origTryMove) processInput._origTryMove = processInput.tryMove;
+                processInput.tryMove = (obj, dx, dy) => { obj.x += dx; obj.y += dy; return true; };
+            } else {
+                if (processInput._origTryMove) {
+                    processInput.tryMove = processInput._origTryMove;
+                    processInput._origTryMove = null;
+                }
+            }
+            
+            // SPEED
+            if (isSpeedBoost()) {
+                if (!mouse._origSpeed) mouse._origSpeed = mouse.speed;
+                mouse.speed = 10;
+            } else {
+                if (mouse._origSpeed) {
+                    mouse.speed = mouse._origSpeed;
+                    mouse._origSpeed = null;
+                }
+            }
+            
+            // GOD
+            if (isGodmode()) {
+                mouse.health = 999;
+                mouse.invincible = true;
+            }
+            
+            processInput(mouse);
+            
+            // Таракан
+            if (cockroach && isInShop()) {
+                cockroach.update(mouse, processInput.tryMove);
+                if (Math.hypot(mouse.x - cockroach.x, mouse.y - cockroach.y) < 60) {
+                    window._openShop = () => openShop(cockroach, mouse, getCheeseCount(), () => {});
+                }
+            }
+            
+            // Коты
+            if (cat && !isGodmode()) cat.update(mouse, processInput.tryMove, getCurrentLevelInfo());
+            if (extraCats && !isGodmode()) {
+                for (const ec of extraCats) ec.update(mouse, processInput.tryMove, getCurrentLevelInfo());
+            }
+            
+            // Собака
+            if (dog) dog.update(mouse, processInput.tryMove, cat);
+            
+            updateGame();
+            updatePipeSpawns();
+            updateCamera(mouse.x, mouse.y);
+        }
     }
     
-    updateGame(tryMove);
-    updateCamera(mouse.x, mouse.y);
-    draw();
+    render(ctx);
+    if (isShowInfo()) drawAdminInfo(ctx);
     requestAnimationFrame(update);
 }
 
-function draw() {
-    const worldMap = getWorldMap();
-    if (!worldMap) return;
-    
-    ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = "#0a0a0a";
-    ctx.fillRect(0, 0, W, H);
-    
-    const camera = getCamera();
-    drawWorld(ctx, camera, worldMap);
-    
-    const cheeses = getCheeses();
-    if (cheeses) {
-        for (let cheese of cheeses) {
-            if (!cheese.collected) {
-                const x = cheese.x - camera.x;
-                const y = cheese.y - camera.y;
-                ctx.fillStyle = "#ccaa44";
-                ctx.fillRect(x, y, cheese.w, cheese.h);
-            }
-        }
-    }
-    
-    const bones = getBones();
-    if (bones) {
-        for (let bone of bones) {
-            if (!bone.collected) {
-                const x = bone.x - camera.x;
-                const y = bone.y - camera.y;
-                ctx.fillStyle = "#ddbb88";
-                ctx.fillRect(x, y, bone.w, bone.h);
-            }
-        }
-    }
-    
-    const hole = getHole();
-    if (hole && hole.active) {
-        const x = hole.x - camera.x;
-        const y = hole.y - camera.y;
-        ctx.fillStyle = "#444";
-        ctx.fillRect(x, y, hole.w, hole.h);
-        ctx.fillStyle = "#222";
-        ctx.fillRect(x + 10, y + 10, hole.w - 20, hole.h - 20);
-    }
-    
+function drawAdminInfo(ctx) {
     const mouse = getMouse();
-    const cat = getCat();
-    const dog = getDog();
+    const worldMap = getWorldMap();
+    if (!mouse || !worldMap) return;
     
-    if (mouse) {
-        const cheeseCount = getCheeseCount();
-        const boneCount = getBoneCount();
-        const totalCheese = getTotalCheeseGoal();
-        const totalBone = getTotalBoneGoal();
-        mouse.draw(ctx, camera, cheeseCount, boneCount, totalCheese, totalBone);
-    }
-    if (cat) cat.draw(ctx, camera);
-    if (dog) dog.draw(ctx, camera, getBoneCount());
+    const tx = Math.floor(mouse.x / TILE_SIZE);
+    const ty = Math.floor(mouse.y / TILE_SIZE);
+    const tile = worldMap[ty]?.[tx] ?? '?';
+    
+    ctx.fillStyle = "rgba(0,0,0,0.8)";
+    ctx.fillRect(10, 40, 200, 80);
+    ctx.fillStyle = "#0f0";
+    ctx.font = "10px monospace";
+    ctx.fillText(`POS: ${Math.floor(mouse.x)}, ${Math.floor(mouse.y)}`, 16, 55);
+    ctx.fillText(`TILE: ${tx}, ${ty} = ${tile}`, 16, 68);
+    ctx.fillText(`SPD: ${mouse.speed.toFixed(1)} | HP: ${mouse.health}`, 16, 81);
+    ctx.fillText(`NOCLIP: ${isNoclip()} | GOD: ${isGodmode()}`, 16, 94);
 }
 
-window.onload = initGame;
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyE' && isInShop() && window._openShop) {
+        window._openShop();
+        e.preventDefault();
+    }
+});
+
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+window.onload = () => {
+    showSplash(initGame);
+};

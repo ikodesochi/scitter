@@ -1,82 +1,44 @@
-// core/asset_loader.js — загрузка всех картинок и звуков
+// core/asset_loader.js
+// Заглушки для будущих ассетов
 
-/**
- * Загружает одно изображение и возвращает Promise
- * @param {string} src - путь к картинке
- * @returns {Promise<HTMLImageElement>}
- */
-export function loadImage(src) {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = () => {
-            console.warn(`⚠️ Не удалось загрузить: ${src}`);
-            reject(new Error(`Failed to load image: ${src}`));
-        };
-        img.src = src;
-    });
+// Заглушка-изображение (серый квадрат с текстом)
+export function createPlaceholder(text, width, height, color = "#444") {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "#fff";
+    ctx.font = `${Math.floor(height/4)}px monospace`;
+    ctx.textAlign = "center";
+    ctx.fillText(text, width/2, height/2);
+    
+    const img = new Image();
+    img.src = canvas.toDataURL();
+    return img;
 }
 
-/**
- * Загружает несколько изображений параллельно
- * @param {Object} imagesMap - объект { имя: "путь/к/файлу.png", ... }
- * @returns {Promise<Object>} - объект { имя: Image, ... }
- */
-export async function loadImages(imagesMap) {
-    const entries = Object.entries(imagesMap);
-    const results = await Promise.all(
-        entries.map(([key, path]) => loadImage(path).then(img => [key, img]))
-    );
-    return Object.fromEntries(results);
-}
-
-/**
- * Загружает звуковой файл (Web Audio API или простой Audio)
- * @param {string} src - путь к звуку
- * @returns {Promise<HTMLAudioElement>}
- */
-export function loadSound(src) {
-    return new Promise((resolve, reject) => {
-        const audio = new Audio();
-        audio.oncanplaythrough = () => resolve(audio);
-        audio.onerror = () => reject(new Error(`Failed to load sound: ${src}`));
-        audio.src = src;
-    });
-}
-
-/**
- * Загружает несколько звуков параллельно
- * @param {Object} soundsMap - объект { имя: "путь/к/звуку.mp3", ... }
- * @returns {Promise<Object>} - объект { имя: Audio, ... }
- */
-export async function loadSounds(soundsMap) {
-    const entries = Object.entries(soundsMap);
-    const results = await Promise.all(
-        entries.map(([key, path]) => loadSound(path).then(audio => [key, audio]))
-    );
-    return Object.fromEntries(results);
-}
-
-/**
- * Групповая загрузка всех ассетов игры
- * @returns {Promise<Object>} - объект со всеми картинками и звуками
- */
-export async function loadAllAssets() {
-    const images = await loadImages({
-        cat: "../assets/sprites/cat.jpg",
-        dogSleep: "../assets/sprites/dog_sleep.png",
-        dogBark: "../assets/sprites/dog_bark.png",
-        mouse: "../assets/sprites/mouse.png"
-    });
-
-    const sounds = await loadSounds({
-        meow: "../assets/sounds/meow.mp3",
-        bark: "../assets/sounds/bark.mp3",
-        collect: "../assets/sounds/collect.mp3"
-    }).catch(err => {
-        console.warn("Звуки не загружены, игра будет без звука", err);
-        return {};
-    });
-
+// Все ассеты-заглушки
+export function loadAllAssets() {
+    const images = {};
+    const sounds = {};
+    
+    // Спрайты-заглушки
+    images.cat = createPlaceholder("🐱", 32, 32, "#666");
+    images.mouse = createPlaceholder("🐭", 28, 28, "#888");
+    images.dog = createPlaceholder("🐕", 32, 32, "#8B6914");
+    images.cheese = createPlaceholder("🧀", 20, 20, "#ccaa44");
+    images.bone = createPlaceholder("🦴", 16, 16, "#ddbb88");
+    
+    // При попытке загрузить реальные файлы — не падаем
+    try {
+        // Здесь можно добавить загрузку реальных файлов когда они появятся
+    } catch (e) {
+        console.log("Ассеты не найдены, используем заглушки");
+    }
+    
+    console.log("✅ Ассеты-заглушки созданы");
     return { images, sounds };
 }

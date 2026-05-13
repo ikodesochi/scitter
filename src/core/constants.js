@@ -1,8 +1,8 @@
 // core/constants.js
 export const W = window.innerWidth;
 export const H = window.innerHeight;
-export const WORLD_WIDTH = 4000;
-export const WORLD_HEIGHT = 4000;
+export const WORLD_WIDTH = 2000;
+export const WORLD_HEIGHT = 2000;
 export const TILE_SIZE = 40;
 export const COLS = WORLD_WIDTH / TILE_SIZE;
 export const ROWS = WORLD_HEIGHT / TILE_SIZE;
