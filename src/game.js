@@ -21,6 +21,7 @@ import { openShop, isShopOpen, initShopInput } from './systems/shop.js';
 import { initAdmin, isNoclip, isGodmode, isSpeedBoost, isShowInfo } from './systems/admin.js';
 import { showSplash } from './ui/splash.js';
 import { showLevelIntro } from './ui/levelIntro.js';
+import { initEasterEggs, updateEasterEggs, drawIKodeCat, isIKodeActive } from './scripts/eastereggs.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -35,6 +36,7 @@ async function initGame() {
     initInput();
     initShopInput();
     initAdmin();
+    initEasterEggs();
     initLevel();
     initMenu();
     setTryMove(processInput.tryMove);
@@ -118,12 +120,14 @@ function update() {
             
             updateGame();
             updatePipeSpawns();
+            updateEasterEggs();
             updateCamera(mouse.x, mouse.y);
         }
     }
     
     render(ctx);
     if (isShowInfo()) drawAdminInfo(ctx);
+    if (isIKodeActive()) drawIKodeCat(ctx);
     requestAnimationFrame(update);
 }
 
